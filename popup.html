@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>No Kings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <header class="hdr">
+    <div class="hdr-mark" aria-hidden="true">
+      <svg viewBox="0 0 40 40" width="26" height="26">
+        <ellipse cx="20" cy="20" rx="16" ry="9.5" fill="none" stroke="var(--amber)" stroke-width="2.2"/>
+        <circle cx="20" cy="20" r="5.2" fill="var(--amber)"/>
+        <circle cx="20" cy="20" r="2.4" fill="var(--bg)"/>
+      </svg>
+    </div>
+    <div class="hdr-text">
+      <h1>NO KINGS</h1>
+      <p>WHO OWNS THE WEB · v2.0</p>
+    </div>
+    <button id="settings-btn" class="settings-btn" title="Settings" type="button">⚙</button>
+  </header>
+
+  <!-- Settings panel -->
+  <section id="settings" class="settings" hidden>
+    <label class="set-row">
+      <span>Auto-notify on match</span>
+      <input id="set-notify" type="checkbox" />
+    </label>
+    <label class="set-row">
+      <span>Notify threshold (combined %)</span>
+      <input id="set-threshold" type="number" min="0" max="100" step="1" />
+    </label>
+    <label class="set-row col">
+      <span>Live-data API key (optional, stored locally only)</span>
+      <input id="set-key" type="password" placeholder="Financial Modeling Prep key" autocomplete="off" />
+    </label>
+    <button id="set-save" type="button">SAVE SETTINGS</button>
+    <p class="set-hint">Without a key, known companies use the built-in dataset and resolved-but-unknown companies show "company identified, no ownership data."</p>
+  </section>
+
+  <main id="result" class="result" aria-live="polite">
+    <div class="scanning">Acquiring target…</div>
+  </main>
+
+  <section class="lookup">
+    <label for="manual">MANUAL QUERY</label>
+    <div class="lookup-row">
+      <input id="manual" type="text" placeholder="e.g. disney.com" autocomplete="off" spellcheck="false" />
+      <button id="go" type="button">RUN</button>
+    </div>
+  </section>
+
+  <button id="toggle-all" class="toggle-all" type="button">▸ VIEW ALL TRACKED ENTITIES</button>
+  <section id="all-list" class="all-list" hidden></section>
+
+  <footer class="ftr">
+    <p><strong>Illustrative dataset + best-effort live resolution.</strong> Static figures aren't live; Wikidata/live paths require network and a key. Built for educational/exam demonstration of the "Big Three asset manager" narrative.</p>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="resolver.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

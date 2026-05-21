@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "No Kings",
+  "version": "2.0.0",
+  "description": "Who owns the site you're on? Maps domains to parent companies and shows Vanguard, BlackRock, and State Street stakes—plus who actually holds voting power. Alerts when you hit a tracked entity.",
+  "permissions": ["tabs", "notifications", "storage"],
+  "host_permissions": [
+    "https://www.wikidata.org/*",
+    "https://query.wikidata.org/*",
+    "https://financialmodelingprep.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "No Kings — who owns this site?",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
