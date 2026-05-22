@@ -111,25 +111,55 @@
 
   /* ---- settings ----------------------------------------------------------*/
   const settingsPanel = document.getElementById("settings");
+  const setNotify = document.getElementById("set-notify");
+  const setSilent = document.getElementById("set-silent");
+  const setThreshold = document.getElementById("set-threshold");
+  const setKey = document.getElementById("set-key");
+
+  function saveSettingsViaBackground(settings, recheck) {
+    return new Promise((resolve, reject) => {
+      try {
+        chrome.runtime.sendMessage({ type: "saveSettings", settings, recheck: !!recheck }, (resp) => {
+          if (chrome.runtime.lastError) reject(chrome.runtime.lastError);
+          else resolve(resp && resp.settings);
+        });
+      } catch (e) { reject(e); }
+    });
+  }
+
+  function readToggleSettings() {
+    return {
+      notifyEnabled: setNotify.checked,
+      notifySilent: setSilent.checked
+    };
+  }
+
   document.getElementById("settings-btn").addEventListener("click", async () => {
     if (settingsPanel.hidden) {
       const s = await OL.getSettings();
-      document.getElementById("set-notify").checked = !!s.notifyEnabled;
-      document.getElementById("set-silent").checked = !!s.notifySilent;
-      document.getElementById("set-threshold").value = s.threshold;
-      document.getElementById("set-key").value = s.fmpApiKey || "";
+      setNotify.checked = !!s.notifyEnabled;
+      setSilent.checked = !!s.notifySilent;
+      setThreshold.value = s.threshold;
+      setKey.value = s.fmpApiKey || "";
     }
     settingsPanel.hidden = !settingsPanel.hidden;
   });
+
+  // Persist toggles immediately — popup may close before SAVE is clicked.
+  function onToggleChange() {
+    saveSettingsViaBackground(readToggleSettings(), true).catch(() => {});
+  }
+  setNotify.addEventListener("change", onToggleChange);
+  setSilent.addEventListener("change", onToggleChange);
+
   document.getElementById("set-save").addEventListener("click", async () => {
-    await OL.setSettings({
-      notifyEnabled: document.getElementById("set-notify").checked,
-      notifySilent: document.getElementById("set-silent").checked,
-      threshold: Number(document.getElementById("set-threshold").value) || 15,
-      fmpApiKey: document.getElementById("set-key").value.trim()
-    });
+    await saveSettingsViaBackground({
+      notifyEnabled: setNotify.checked,
+      notifySilent: setSilent.checked,
+      threshold: Number(setThreshold.value) || 15,
+      fmpApiKey: setKey.value.trim()
+    }, true);
     settingsPanel.hidden = true;
-    try { chrome.runtime.sendMessage({ type: "recheck" }); } catch (e) {}
     init(); // re-resolve current tab with new settings
   });
 

@@ -1,0 +1,7 @@
+{
+  "name": "no-kings",
+  "private": true,
+  "scripts": {
+    "zip": "node scripts/zip-webstore.js"
+  }
+}

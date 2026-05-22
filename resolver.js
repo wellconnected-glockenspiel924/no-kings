@@ -67,9 +67,14 @@
     });
   }
   function setSettings(patch) {
-    return getSettings().then((s) => new Promise((resolve) => {
+    return getSettings().then((s) => new Promise((resolve, reject) => {
       const merged = Object.assign({}, s, patch);
-      chrome.storage.local.set({ settings: merged }, () => resolve(merged));
+      try {
+        chrome.storage.local.set({ settings: merged }, () => {
+          if (chrome.runtime.lastError) reject(chrome.runtime.lastError);
+          else resolve(merged);
+        });
+      } catch (e) { reject(e); }
     }));
   }
   async function isDomainMuted(domain) {

@@ -106,13 +106,27 @@ chrome.notifications.onClicked.addListener((notificationId) => {
   try { chrome.notifications.clear(notificationId); } catch (e) {}
 });
 
-// Let the popup ask us to re-check (e.g. after the user changes settings).
+function recheckActiveTab() {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    const t = tabs && tabs[0];
+    if (t && t.url) {
+      notifiedThisSession.delete(OL.normalizeDomain(t.url));
+      processTab(t.id, t.url);
+    }
+  });
+}
+
+// Settings are saved in the service worker so writes survive popup close (MV3).
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-  if (msg && msg.type === "recheck") {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      const t = tabs && tabs[0];
-      if (t && t.url) { notifiedThisSession.delete(OL.normalizeDomain(t.url)); processTab(t.id, t.url); }
+  if (msg && msg.type === "saveSettings") {
+    OL.setSettings(msg.settings || {}).then((merged) => {
+      if (msg.recheck) recheckActiveTab();
+      sendResponse({ ok: true, settings: merged });
     });
+    return true;
+  }
+  if (msg && msg.type === "recheck") {
+    recheckActiveTab();
   }
   return false;
 });

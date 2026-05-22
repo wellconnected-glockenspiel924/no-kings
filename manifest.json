@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "No Kings",
   "version": "2.0.0",
-  "description": "Who owns the site you're on? Maps domains to parent companies and shows Vanguard, BlackRock, and State Street stakes—plus who actually holds voting power. Alerts when you hit a tracked entity.",
+  "description": "Who owns the site you're on? Big Three stakes (Vanguard, BlackRock, State Street), voting control, and alerts on tracked sites.",
   "permissions": ["tabs", "notifications", "storage"],
   "host_permissions": [
     "https://www.wikidata.org/*",
