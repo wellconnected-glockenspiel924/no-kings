@@ -41,6 +41,8 @@ async function maybeNotify(res) {
   const settings = await OL.getSettings();
   if (!settings.notifyEnabled) return;
   if (band.pct < settings.threshold) return;
+  if (await OL.isDomainMuted(res.domain)) return;
+  if (settings.notifySilent) return;
   if (notifiedThisSession.has(res.domain)) return;
   notifiedThisSession.add(res.domain);
 
@@ -53,6 +55,7 @@ async function maybeNotify(res) {
       message:
         `${res.company} (${res.ticker || "—"}) is ${band.pct.toFixed(1)}% held by ` +
         `Vanguard + BlackRock + State Street combined.${controlLine}`,
+      buttons: [{ title: "Don't show for this site" }],
       priority: 1
     });
   } catch (e) {}
@@ -91,6 +94,17 @@ chrome.tabs.onRemoved.addListener((tabId) => lastByTab.delete(tabId));
 
 // Clear the per-session notify dedupe roughly daily.
 chrome.runtime.onInstalled.addListener(() => notifiedThisSession.clear());
+
+chrome.notifications.onButtonClicked.addListener(async (notificationId, buttonIndex) => {
+  if (buttonIndex !== 0) return;
+  const domain = notificationId.split(":")[1];
+  if (domain) await OL.muteDomain(domain);
+  try { chrome.notifications.clear(notificationId); } catch (e) {}
+});
+
+chrome.notifications.onClicked.addListener((notificationId) => {
+  try { chrome.notifications.clear(notificationId); } catch (e) {}
+});
 
 // Let the popup ask us to re-check (e.g. after the user changes settings).
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {

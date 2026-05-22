@@ -11,8 +11,10 @@
 
   const DEFAULT_SETTINGS = {
     notifyEnabled: true,
+    notifySilent: false,  // badge only — skip OS popups on navigation
     threshold: 15,        // combined Big-Three % at/above which we notify
     fmpApiKey: "",        // optional, user-supplied, stored locally only
+    mutedDomains: [],     // eTLD+1 domains the user never wants notified
     ttlMs: 1000 * 60 * 60 * 24 // cache results for 24h
   };
 
@@ -69,6 +71,16 @@
       const merged = Object.assign({}, s, patch);
       chrome.storage.local.set({ settings: merged }, () => resolve(merged));
     }));
+  }
+  async function isDomainMuted(domain) {
+    const s = await getSettings();
+    return (s.mutedDomains || []).includes(domain);
+  }
+  async function muteDomain(domain) {
+    const s = await getSettings();
+    const muted = s.mutedDomains || [];
+    if (muted.includes(domain)) return s;
+    return setSettings({ mutedDomains: muted.concat(domain) });
   }
   function cacheGet(key) {
     return new Promise((resolve) => {
@@ -243,6 +255,7 @@
   // Expose
   self.OL = {
     DEFAULT_SETTINGS, normalizeDomain, sumBigThree, classify,
-    getSettings, setSettings, resolve, wikidataResolve, fetchHolders
+    getSettings, setSettings, isDomainMuted, muteDomain,
+    resolve, wikidataResolve, fetchHolders
   };
 })();

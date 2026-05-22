@@ -115,6 +115,7 @@
     if (settingsPanel.hidden) {
       const s = await OL.getSettings();
       document.getElementById("set-notify").checked = !!s.notifyEnabled;
+      document.getElementById("set-silent").checked = !!s.notifySilent;
       document.getElementById("set-threshold").value = s.threshold;
       document.getElementById("set-key").value = s.fmpApiKey || "";
     }
@@ -123,6 +124,7 @@
   document.getElementById("set-save").addEventListener("click", async () => {
     await OL.setSettings({
       notifyEnabled: document.getElementById("set-notify").checked,
+      notifySilent: document.getElementById("set-silent").checked,
       threshold: Number(document.getElementById("set-threshold").value) || 15,
       fmpApiKey: document.getElementById("set-key").value.trim()
     });
